@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using WebAPLIKACIJAVEZBANJE.Enums;
 
 namespace WebApplication1.Models
 {
     public class PrijavaStudenta
     {
-        [Key]
+        [Key]  // ✅ Primarni ključ, auto-generisan
         public int Id { get; set; }
 
         [ForeignKey("Student")]
@@ -15,6 +16,6 @@ namespace WebApplication1.Models
         [ForeignKey("Predmet")]
         public int PredmetId { get; set; }
         public Predmet Predmet { get; set; }
-        public bool StatusIspita { get; set; }
+        public bool StatusIspita { get; set; } // ✅ True = Položen, False = Nepoložen
     }
 }
