@@ -3,7 +3,7 @@ using WebApplication1.Data;
 using WebApplication1.Models;
 using WebApplication1.Services;
 
-namespace WebApplication1.ServiceImplementation
+namespace WebApplication1.ServicesImplementation
 {
     public class PredmetServiceImplementation : IPredmetService
     {
@@ -32,46 +32,20 @@ namespace WebApplication1.ServiceImplementation
                 .FirstOrDefault(p => p.Id == id);
         }
 
-        public void AddPredmet(Predmet predmet, List<int> smerIds, List<int> profesorIds)
+        public void AddPredmet(Predmet predmet)
         {
-            // Povezivanje predmeta sa smerovima
-            predmet.Smerovi = _context.Smerovi
-                .Where(s => smerIds.Contains(s.Id))
-                .ToList();
-
-            // Povezivanje predmeta sa profesorima
-            predmet.Profesori = _context.Profesori
-                .Where(prof => profesorIds.Contains(prof.Id))
-                .ToList();
-
             _context.Predmeti.Add(predmet);
             _context.SaveChanges();
         }
 
-        public void UpdatePredmet(int id, Predmet predmet, List<int> smerIds, List<int> profesorIds)
+
+        public void UpdatePredmet(int id, string naziv, int brojEspb)
         {
-            var existingPredmet = _context.Predmeti
-                .Include(p => p.Smerovi)
-                .Include(p => p.Profesori)
-                .FirstOrDefault(p => p.Id == id);
+            var existingPredmet = _context.Predmeti.Find(id);
+            if (existingPredmet == null) throw new System.Exception("Predmet not found");
 
-            if (existingPredmet == null)
-                throw new Exception($"Predmet sa ID-jem {id} ne postoji.");
-
-            existingPredmet.Naziv = predmet.Naziv;
-            existingPredmet.BrojEspb = predmet.BrojEspb;
-
-            // Ažuriranje povezanih smerova
-            existingPredmet.Smerovi.Clear();
-            existingPredmet.Smerovi = _context.Smerovi
-                .Where(s => smerIds.Contains(s.Id))
-                .ToList();
-
-            // Ažuriranje povezanih profesora
-            existingPredmet.Profesori.Clear();
-            existingPredmet.Profesori = _context.Profesori
-                .Where(prof => profesorIds.Contains(prof.Id))
-                .ToList();
+            existingPredmet.Naziv = naziv;
+            existingPredmet.BrojEspb = brojEspb;
 
             _context.SaveChanges();
         }

@@ -1,4 +1,5 @@
-﻿using WebApplication1.Models;
+﻿using System.Threading.Tasks;
+using WebApplication1.Models;
 
 namespace WebApplication1.Services
 {
@@ -12,6 +13,8 @@ namespace WebApplication1.Services
         Task<Profesor> GetProfesorByUserIdAsync(int userId);
         Task<User?> GetUserByUsernameAsync(string username);
         Task<bool> ChangePasswordAsync(string username, string currentPassword, string newPassword);
+        Task<object> GetUserProfileAsync(int userId);
+
 
     }
 }

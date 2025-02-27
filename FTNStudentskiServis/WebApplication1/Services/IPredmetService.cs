@@ -6,8 +6,8 @@ namespace WebApplication1.Services
     {
         IEnumerable<Predmet> GetAllPredmets();
         Predmet GetPredmetById(int id);
-        void AddPredmet(Predmet predmet, List<int> smerIds, List<int> profesorIds);
-        void UpdatePredmet(int id, Predmet predmet, List<int> smerIds, List<int> profesorIds);
+        void AddPredmet(Predmet predmet);
+        void UpdatePredmet(int id, string naziv , int brojEspb);
         void DeletePredmet(int id);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
 using WebApplication1.Services;
@@ -137,6 +138,60 @@ namespace WebApplication1.ServiceImplementation
 
             return true;
         }
+
+        public async Task<object> GetUserProfileAsync(int userId)
+        {
+            var user = await _context.Users
+                .Include(u => u.Student)
+                .Include(u => u.Profesor)
+                .ThenInclude(p => p.Katedra)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+                throw new Exception("Korisnik nije pronađen.");
+
+            if (user.Role == "Student" && user.Student != null)
+            {
+                return new
+                {
+                    user.Id,
+                    user.Ime,
+                    user.Prezime,
+                    user.Username,
+                    user.Role,
+                    user.Student.Index,
+                    user.Student.GodinaUpisa,
+                    SmerId = user.Student.SmerId
+                };
+            }
+            else if (user.Role == "Profesor" && user.Profesor != null)
+            {
+                return new
+                {
+                    user.Id,
+                    user.Ime,
+                    user.Prezime,
+                    user.Username,
+                    user.Role,
+                    user.Profesor.Zvanje,
+                    KatedraNaziv = user.Profesor.Katedra?.Naziv
+                };
+            }
+            else if (user.Role == "Admin")
+            {
+                return new
+                {
+                    user.Id,
+                    user.Ime,
+                    user.Prezime,
+                    user.Username,
+                    user.Role
+                };
+            }
+
+            throw new Exception("Nepoznata uloga korisnika.");
+        }
+
 
 
     }

@@ -6,9 +6,9 @@ namespace WebApplication1.Services
     {
         IEnumerable<Smer> GetAllSmerovi();
         Smer GetSmerById(int id);
-        void AddSmer(Smer smer, List<int> katedraIds, List<int> predmetIds);
-        void UpdateSmer(int id, Smer smer, List<int> katedraIds, List<int> predmetIds);
+        void AddSmer(Smer smer);
+        void UpdateSmer(int id, string naziv);
         void DeleteSmer(int id);
-
+        void DodajPredmeteUSmer(int smerId, List<int> predmetIds);
     }
 }

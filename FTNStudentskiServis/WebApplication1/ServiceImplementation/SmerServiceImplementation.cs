@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore; // Dodato za Include i ThenInclude
 using WebApplication1.Data;
 using WebApplication1.Models;
 using WebApplication1.Services;
 
-namespace WebApplication1.ServiceImplementation
+namespace WebApplication1.ServicesImplementation
 {
     public class SmerServiceImplementation : ISmerService
     {
@@ -17,46 +17,59 @@ namespace WebApplication1.ServiceImplementation
         public IEnumerable<Smer> GetAllSmerovi()
         {
             return _context.Smerovi
-                .Include(s => s.Katedre)
-                .Include(s => s.Predmeti)
-                .ThenInclude(p => p.Profesori)
-                .ThenInclude(prof => prof.User) // Učitaj povezani User za profesora
-                .ToList();
+              .Include(s => s.Katedre)
+              .Include(s => s.Predmeti)
+              .ThenInclude(p => p.Profesori)
+              .ThenInclude(prof => prof.User)
+              .ToList();
         }
 
         public Smer GetSmerById(int id)
         {
             return _context.Smerovi
-                .Include(s => s.Katedre)
-                .Include(s => s.Predmeti)
-                .ThenInclude(p => p.Profesori)
-                .ThenInclude(prof => prof.User) // Učitaj povezani User za profesora
-                .FirstOrDefault(s => s.Id == id);
+              .Include(s => s.Katedre)
+              .Include(s => s.Predmeti)
+              .ThenInclude(p => p.Profesori)
+              .ThenInclude(prof => prof.User)
+              .FirstOrDefault(s => s.Id == id);
         }
 
-        public void AddSmer(Smer smer, List<int> katedraIds, List<int> predmetIds)
+        public void AddSmer(Smer smer)
         {
-            var katedre = _context.Katedre.Where(k => katedraIds.Contains(k.Id)).ToList();
-            var predmeti = _context.Predmeti.Where(p => predmetIds.Contains(p.Id)).ToList();
-
-            smer.Katedre = katedre;
-            smer.Predmeti = predmeti;
-
             _context.Smerovi.Add(smer);
             _context.SaveChanges();
         }
 
-        public void UpdateSmer(int id, Smer smer, List<int> katedraIds, List<int> predmetIds)
+        public void UpdateSmer(int id, string naziv)
         {
-            var existingSmer = _context.Smerovi
-                .Include(s => s.Katedre)
-                .Include(s => s.Predmeti)
-                .FirstOrDefault(s => s.Id == id);
-            if (existingSmer == null) throw new System.Exception("Smer not found");
+            var existingSmer = _context.Smerovi.Find(id);
+            if (existingSmer == null) throw new Exception("Smer not found");
 
-            existingSmer.Naziv = smer.Naziv;
-            existingSmer.Katedre = _context.Katedre.Where(k => katedraIds.Contains(k.Id)).ToList();
-            existingSmer.Predmeti = _context.Predmeti.Where(p => predmetIds.Contains(p.Id)).ToList();
+            existingSmer.Naziv = naziv;
+            _context.SaveChanges();
+        }
+
+        public void DodajPredmeteUSmer(int smerId, List<int> predmetIds)
+        {
+            var smer = _context.Smerovi
+              .Include(s => s.Predmeti)
+              .FirstOrDefault(s => s.Id == smerId);
+
+            if (smer == null)
+                throw new Exception("Smer nije pronađen.");
+
+            var predmetiZaDodavanje = _context.Predmeti
+              .Where(p => predmetIds.Contains(p.Id))
+              .ToList();
+
+            if (!predmetiZaDodavanje.Any())
+                throw new Exception("Nema validnih predmeta za dodavanje.");
+
+            foreach (var predmet in predmetiZaDodavanje)
+            {
+                if (!smer.Predmeti.Contains(predmet))
+                    smer.Predmeti.Add(predmet);
+            }
 
             _context.SaveChanges();
         }
@@ -64,7 +77,7 @@ namespace WebApplication1.ServiceImplementation
         public void DeleteSmer(int id)
         {
             var smer = _context.Smerovi.FirstOrDefault(s => s.Id == id);
-            if (smer == null) throw new System.Exception("Smer not found");
+            if (smer == null) throw new Exception("Smer not found");
 
             _context.Smerovi.Remove(smer);
             _context.SaveChanges();
