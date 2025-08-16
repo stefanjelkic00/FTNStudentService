@@ -1,150 +1,136 @@
-FTNStudentService je aplikacija namenjena studentima i osoblju Fakulteta tehničkih nauka, 
-pružajući različite usluge poput pregleda predmeta, prijave ispita i ocenjivanja istih.
-Logika je napravljena kao nadovezujuca logika na vec postojeci sajt Fakulteta tehnickih nauka, 
-sa ciljem da ima ulogu studentskog web servisa i profesorskog web servisa. 
+FTNStudentService is an application designed for students and staff of the Faculty of Technical Sciences,
+providing various services such as course overview, exam registration and grading.
+The logic is created as an extension to the existing Faculty of Technical Sciences website,
+with the goal of serving as a student web service and professor web service.
 
-Tehnologije koje su koriscene su :
-  Bekend: ASP.NET Core​
-  Frontend: React.js​
-  Baza podataka: SQL Server
+Technologies used are:
+Backend: ASP.NET Core
+Frontend: React.js
+Database: SQL Server
 
-Bekend:
-  .NET 8 (ASP.NET Core Web API) - Verzija koja je koriscena. 
-  Entity Framework Core (EF Core) - ORM (Object-Relational Mapping) alat za jednostavan rad sa bazom podataka pomoću C# objekata.
-  SQL Server – relaciona baza podataka korišćena za čuvanje svih entiteta (useri, katedre, smerovi, predmeti,ostale medju relacije i povezanosti).
-  JWT (JSON Web Token) – za autentifikaciju i autorizaciju korisnika sistema (student, profesor, admin).
-  Swagger – dokumentacija i testiranje API-ja direktno iz browsera.
-
-
-Modularna struktura unutar bekend dela. 
-Svi servisi, interfejsi i logika razdvojeni po odgovornosti (IService, ServiceImplementation, Controller).
-
-Pokretanje bekenda: dotnet run 
-  ovo je putanja ka bekendu: http://localhost:5299/api
-
+Backend:
+.NET 8 (ASP.NET Core Web API)     -Version used
+Entity Framework Core (EF Core)    -ORM (Object-Relational Mapping) tool for easy database work using C# objects
+SQL Server                         -Relational database used for storing all entities (users, departments, programs, courses, other inter-relations and connections)
+JWT (JSON Web Token)               -For authentication and authorization of system users (student, professor, admin)
+Swagger                            -Documentation and API testing directly from browser
+Modular structure within backend part.
+All services, interfaces and logic separated by responsibility (IService, ServiceImplementation, Controller).
+Running backend: dotnet run
+Backend path: http://localhost:5299/api
 
 Frontend:
-  React – JavaScript biblioteka za izradu brzog i interaktivnog korisničkog interfejsa (SPA).
-  Axios – HTTP klijent korišćen za komunikaciju sa .NET backend API-jem.
-  React Bootstrap – React komponente bazirane na Bootstrap frameworku za brži razvoj responzivnog i konzistentnog dizajna.
-  Formik – biblioteka za upravljanje formama i validacijom u React aplikacijama.
-  Yup – biblioteka za validaciju formi koja se koristi u kombinaciji sa Formik-om.
-  JWT Decode – dekodiranje JWT tokena na klijentskoj strani radi autorizacije i prikaza sadržaja u zavisnosti od uloge korisnika.
-  React Toastify – prikazivanje notifikacija i korisničkih poruka.
+React                              -JavaScript library for building fast and interactive user interface (SPA)
+Axios                              -HTTP client used for communication with .NET backend API
+React Bootstrap                    -React components based on Bootstrap framework for faster development of responsive and consistent design
+Formik                             -Library for managing forms and validation in React applications
+Yup                                -Form validation library used in combination with Formik
+JWT Decode                         -Decoding JWT tokens on client side for authorization and content display based on user role
+React Toastify                     -Displaying notifications and user messages
+Running frontend:
+Install all dependencies: npm install
+Start React application: npm start
+Application will be available at: http://localhost:3000
 
-Pokretanje frontenda:
-    Instalirati sve zavisnosti: npm install
-    Pokrenuti React aplikaciju: npm start
-    Aplikacija će biti dostupna na: http://localhost:3000
+Database:
+SQL Server (Microsoft SQL Server).
+Data for entering departments, programs and courses to be entered through query that will be located at the bottom of the readme file.
+Relations between them as well.
+As for professors and students, it's best to enter them manually through registration.
+Administrator to be entered manually through database query as there is no registration for admin.
+As for all other tables, they will be populated through further application testing and there's no need for entering data through queries.
+All queries will be located at the bottom below functionality description.
 
+Functionalities:
+Everyone: These are homepage functionalities that don't require user to be logged in to access.
+Homepage contains general information about our site.
+At the very top there are buttons for displaying faculty information that take us to the next page showing all departments and programs.
+When clicking on a department, it takes us to a new window displaying the department name and all programs belonging to the selected department.
+When clicking on a program, it takes us to a new window displaying the program name and all courses belonging to that program and names of professors teaching those courses.
+Next on homepage is a contact button that takes us to the actual contact section of the official Faculty of Technical Sciences website, considering the site logic is an extension of the FTN website.
+Below that are some basic information about Faculty of Technical Sciences, number of students, employees, laboratories, library units and departments.
+Along with that are images of the faculty and the city of Novi Sad where the faculty originates from.
+Below that is a news section and below that is a button taking us to the actual FTN website and enrollment for next year.
+Below that are images of some of the main FTN buildings and below that we have a button taking us to homepage with description "Join the FTN community".
 
-Baza podataka: 
-  SQL Server (Microsoft SQL Server).
-  Podatke za unos katedri , smerova i predmeta uneti kroz upit koji ce se nalaziti na dnu read me fajla . 
-  Relacije izmedju njih takodje. 
-  Sto se tice profesora i studenata njih najbolje rucno uneti putem registracije.
-  Administratora uneti rucno kroz upit u bazi jer za njega ne postoji registracija.
-  Sto se tice svih ostalih tabela one ce se popunjavati daljim testiranjem aplikacije i za unosenjem podataka kroz upit nema potrebe.
+Student:
+Has a profile button that takes them to personal data and password change option.
+When logged in, automatically redirected to profile page.
+Has a window displaying program with all courses in that program and number of ECTS credits each course has.
+Has option in new window to register for exams that aren't already registered.
+Has next window displaying passed courses with their names, individual ECTS credits and grades.
+Also displays total number of ECTS credits and average grade from all passed courses for that student.
+In next window there's a section listing all registered courses where student can see which courses they registered for examination.
 
-Svi queriji ce se nalaziti na dnu ispod opisa funkcionalnosti.
+Professor:
+Has a profile button that takes them to personal data and password change option.
+When logged in, automatically redirected to profile page.
+Has window titled "My courses and registered students" where all courses are arranged by programs with exam registrations from students listed below them.
+Professor has duty to grade those courses for students with grades from 5-10.
+Next window is "Graded students" where professor has insight into all exam registrations they graded with passing grade.
+Colors around grade change based on grade professor assigned:
+6-red
+7,8-yellow
+9-10-green
+Next window is "Courses for application" listing all courses the professor doesn't teach with buttons for applying to be assigned to those courses.
+Next window is "My requests" listing all requests the professor submitted.
+If administrator approved them, it will show in green on right side "approved", while pending shows in yellow frame "pending" and next to it in red frame "cancel".
 
-
-
-
-Funkcionalnosti:
-  Svi: Ovo su funkcionalnosti pocetne stranice kojima ne treba korisnik ni da bude ulogovan da bih mogao pristupiti.
-    Pocetna stranica u sebi sadrzi opste informacije o nasem sajtu. 
-    Skroz gore postoje dugmad za prikaz fakultetskih informacija gde nas vodi u narednu stranicu u prikaz svih katedri i smerova .
-    Kada se klikne na neku katedru vodi nas u novi prozor gde nam ispisuje pored naziva katedre i sve smerove koji pripadaju izabranoj katedri.
-    Kada se klikne na neki smer vodi nas na nov prozor gde nam ispisuje pored naziva smera sve predmete koji pripadaju tom smeru i imena profesora koji predaju na tim predmetima.
-    Sledece na pocetnoj stranici je dugme sa kontaktom koje nas vodi na pravu sekciju oficijalnog sajta Fakulteta tehnickih nauka u kontakt deo sobzirom da je logika sajta nadovezivanje na ftn sajt.
-    Ispod toga se nalaze neke osnovne informacije o fakultetu tehnickih nauka, broj studenata, zaposlenih, laboratorija, biblioteckih jedinica i departmana.
-    Uz to se nalaze i slike fakulteta i grada Novog Sada odakle i potice fakultet.
-    Ispod toga se nalazi deo sa vestima a ispod toga se nalazi dugme koje nas vodi na pravi ftn sajt i upis u narednu godinu.
-    Ispod toga se nalaze slike nekih od glavnih Ftn-ovih objekata i ispod toga imamo dugme koje nas vodi na pocetnu stranicu uz opis "Pridruži se FTN zajednici".
-    
-  Student:
-    Ima dugme profil koje ga vodi na licne podatke i mogucnost promene lozinke.
-    Kada se uloguje automatski ga vodi na profile page.
-    Ima u prozoru prikaz smera sa prikazom svih predmeta koji se nalaze u tom smeru i brojem ESPB bodova koje svaki od tih predmeta ima.
-    Ima u novom prozoru mogucnost prijave ispita koji mu nisu prijavljeni za polaganje.
-    Ima u narednom prozoru prikaz polozenih predmeta gde pisu njihovi nazivi zasebni brojevi ESPB bodova i ocena. 
-    Takodje postoje i prikaz ukupnog broja ESPB bodova i prosecne ocene od svih polozenih predmeta datog studenta.
-    U narednom prozoru postoji sekcija sa ispisom svih prijavljenih predmeta gde student moze da vidi koje sve predmete je prijavio za polaganje.
-
-  Profesor:
-    Ima dugme profil koje ga vodi na licne podatke i mogucnost promene lozinke.
-    Kada se uloguje automatski ga vodi na profile page.
-    Ima prozor pod nazivom  "Moji predmeti i prijavljeni studenti" gde se nalaze rasporedjeni svi predmeti po smerovima i ispod njih se nalaze prijave za te predmete od strane studenata.
-    Profesor ima duznost da te predmete oceni studentima sa ocenama od 5-10. 
-    Sledeci prozor je "Ocenjeni studenti" gde profesor ima uvid u sve prijave ispita koje je ocenio sa prolaznom ocenom. 
-    Boje oko ocene se menjaju spram ocene koju je profesor dodelio.
-      6-crvena.
-      7,8-zuta.
-      9-10-zelena.
-    Sledeci prozor je "Predmeti za apliciranje" gde se ispisuju svi predmeti na kojima profesor ne predaje i postoje dugmad za mogucnost apliciranja na te predmete da se dodele i tom profesoru.
-    Sledeci prozor je "Moji zahtevi" gde se ispisuju svi zahtevi za koje je profesor podneo prijavu. 
-    U slucaju da ih mu je administrator odobrio pisace zelenim u desnoj strani odobren, dok je na cekanju pisace u zutom okviru na cekanju i pored crvenim okvirom otkazi.
-
-    
 Admin:
-  Ima dugme profil koje ga vodi na licne podatke i mogucnost promene lozinke.
-  Kada se uloguje automatski ga vodi na profile page.
-  Ima prozor "Zahtevi profesora" gde mu se ispisuju svi podneti zahtevi od strane profesora za apliciranje na predmet gde ce admin imati mogucnost da odobri ili odbije taj zahtev.
-  Sledeci prozor je "Korisnici" gde mu se ispisuju svi korisnici aplikacije koji su registrovani pod reonima studenti i profesori, imace mogucnost za uklanjanje korisnika u potpunosti i sve njihove logike do tad.
-  Sledeci prozor je "Katedre" gde ce korisnik imati kompletan CRUD za katedre.
-  Sledeci prozor je "Smerovi" gde ce korisnik imati kompletan CRUD za smerove.
-  Sledeci prozor je "Predmeti" gde ce korisnik imati kompletan CRUD za predmete.
-
-
-
-Query upit za unos svih Katedri , Smerova ,Predmeta i njihovih relacija radi lepse i preciznije generisane aplikacije i podataka unutar nje:
+Has a profile button that takes them to personal data and password change option.
+When logged in, automatically redirected to profile page.
+Has window "Professor requests" listing all submitted requests from professors for course applications where admin can approve or reject the request.
+Next window is "Users" listing all registered application users under sections students and professors, with ability to completely remove users and all their logic up to that point.
+Next window is "Departments" where user has complete CRUD for departments.
+Next window is "Programs" where user has complete CRUD for programs.
+Next window is "Courses" where user has complete CRUD for courses.
+Query for entering all Departments, Programs, Courses and their relations for better and more precise generated application and data within it:
 
 INSERT INTO Katedre (Naziv) VALUES 
-('Računarstvo i automatika'),
-('Softversko inženjerstvo'),
-('Elektronika'),
-('Industrijsko inženjerstvo i menadžment'),
-('Telekomunikacije i obrada signala');
+('Computer Science and Automation'),
+('Software Engineering'),
+('Electronics'),
+('Industrial Engineering and Management'),
+('Telecommunications and Signal Processing');
 
 INSERT INTO Smerovi (Naziv) VALUES
-('Računarsko inženjerstvo'),
-('Automatika i elektronika'),
-('Softverski sistemi'),
-('Robotika'),
-('Ugrađeni sistemi'),
-('Softversko inženjerstvo'),
-('Informacioni sistemi'),
-('Programiranje igara'),
-('Veb programiranje'),
-('Računarska grafika'),
-('Elektronika'),
-('Mikroelektronika'),
-('Digitalni sistemi'),
-('Mikroprocesorski sistemi'),
-('Elektronska merenja'),
-('Industrijsko inženjerstvo'),
-('Menadžment u inženjerstvu'),
-('Organizacija rada'),
-('Logistika'),
-('Kvalitet i standardizacija'),
-('Telekomunikacije'),
-('Obrada signala'),
-('Bežične komunikacije'),
-('Mobilne mreže'),
-('Internet stvari (IoT)');
+('Computer Engineering'),
+('Automation and Electronics'),
+('Software Systems'),
+('Robotics'),
+('Embedded Systems'),
+('Software Engineering'),
+('Information Systems'),
+('Game Programming'),
+('Web Programming'),
+('Computer Graphics'),
+('Electronics'),
+('Microelectronics'),
+('Digital Systems'),
+('Microprocessor Systems'),
+('Electronic Measurements'),
+('Industrial Engineering'),
+('Engineering Management'),
+('Work Organization'),
+('Logistics'),
+('Quality and Standardization'),
+('Telecommunications'),
+('Signal Processing'),
+('Wireless Communications'),
+('Mobile Networks'),
+('Internet of Things (IoT)');
 
 INSERT INTO Predmeti (Naziv, BrojEspb) VALUES
-('Matematika 1', 8),
-('Osnovi programiranja', 8),
-('Algoritmi i strukture podataka', 6),
-('Baze podataka', 6),
-('Operativni sistemi', 6),
-('Računarske mreže', 6),
-('Elektronika 1', 5),
-('Digitalna logika', 5),
-('Objektno orijentisano programiranje', 5),
-('Softversko inženjerstvo', 5);
+('Mathematics 1', 8),
+('Programming Fundamentals', 8),
+('Algorithms and Data Structures', 6),
+('Databases', 6),
+('Operating Systems', 6),
+('Computer Networks', 6),
+('Electronics 1', 5),
+('Digital Logic', 5),
+('Object-Oriented Programming', 5),
+('Software Engineering', 5);
 
 INSERT INTO SmerKatedra (KatedreId, SmeroviId) VALUES
 (1, 1), (1, 2), (1, 4), (1, 5), (1, 9),
